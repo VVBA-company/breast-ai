@@ -1,0 +1,38 @@
+{
+    "type_of_breast_surgery": {
+        "BREAST CONSERVING": 0,
+        "MASTECTOMY": 1
+    },
+    "cancer_type": {
+        "Breast Cancer": 0
+    },
+    "cancer_type_detailed": {
+        "Breast": 0,
+        "Breast Invasive Ductal Carcinoma": 1,
+        "Breast Invasive Lobular Carcinoma": 2,
+        "Breast Invasive Mixed Mucinous Carcinoma": 3,
+        "Breast Mixed Ductal and Lobular Carcinoma": 4
+    },
+    "cellularity": {
+        "High": 0,
+        "Low": 1,
+        "Moderate": 2
+    },
+    "pam50_+_claudin-low_subtype": {
+        "Basal": 0,
+        "Her2": 1,
+        "LumA": 2,
+        "LumB": 3,
+        "NC": 4,
+        "Normal": 5,
+        "claudin-low": 6
+    },
+    "her2_status": {
+        "Negative": 0,
+        "Positive": 1
+    },
+    "pr_status": {
+        "Negative": 0,
+        "Positive": 1
+    }
+}
