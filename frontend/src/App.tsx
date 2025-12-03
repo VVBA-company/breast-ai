@@ -101,7 +101,9 @@ function App() {
                     required
                   >
                     <option value="">Chọn loại phẫu thuật</option>
-                    <option value="BREAST CONSERVING">Breast Conserving (Bảo tồn vú)</option>
+                    <option value="BREAST CONSERVING">
+                      Breast Conserving (Bảo tồn vú)
+                    </option>
                     <option value="MASTECTOMY">Mastectomy (Cắt bỏ vú)</option>
                   </select>
                 </div>
@@ -116,13 +118,19 @@ function App() {
                     required
                   >
                     <option value="">Chọn loại ung thư</option>
-                    <option value="Breast Cancer">Breast Cancer (Ung thư vú)</option>
-                    <option value="Breast Sarcoma">Breast Sarcoma (U xơ vú)</option>
+                    <option value="Breast Cancer">
+                      Breast Cancer (Ung thư vú)
+                    </option>
+                    <option value="Breast Sarcoma">
+                      Breast Sarcoma (U xơ vú)
+                    </option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="cellularity">Mật độ tế bào (Cellularity):</label>
+                  <label htmlFor="cellularity">
+                    Mật độ tế bào (Cellularity):
+                  </label>
                   <select
                     id="cellularity"
                     name="cellularity"
@@ -250,7 +258,9 @@ function App() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="hormone_therapy">Liệu pháp nội tiết (Hormone Therapy):</label>
+                  <label htmlFor="hormone_therapy">
+                    Liệu pháp nội tiết (Hormone Therapy):
+                  </label>
                   <select
                     id="hormone_therapy"
                     name="hormone_therapy"
@@ -318,7 +328,8 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          ⚠️ Lưu ý: Kết quả này chỉ mang tính chất tham khảo. Vui lòng tham khảo ý kiến bác sĩ chuyên khoa để được tư vấn y khoa chuyên nghiệp.
+          ⚠️ Lưu ý: Kết quả này chỉ mang tính chất tham khảo. Vui lòng tham khảo
+          ý kiến bác sĩ chuyên khoa để được tư vấn y khoa chuyên nghiệp.
         </p>
       </footer>
     </div>

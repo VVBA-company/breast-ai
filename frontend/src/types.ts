@@ -42,8 +42,7 @@ export const CANCER_TYPE_DESCRIPTIONS: Record<number, string> = {
 };
 
 export const SURGERY_TYPE_DESCRIPTIONS: Record<string, string> = {
-  "BREAST CONSERVING":
-    "Phẫu thuật bảo tồn vú - Giữ lại hầu hết mô vú",
+  "BREAST CONSERVING": "Phẫu thuật bảo tồn vú - Giữ lại hầu hết mô vú",
   MASTECTOMY: "Phẫu thuật cắt bỏ vú - Loại bỏ toàn bộ hoặc hầu hết mô vú",
 };
 
