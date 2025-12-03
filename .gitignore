@@ -182,19 +182,6 @@ $RECYCLE.BIN/
 *.msp
 *.lnk
 
-# Data Science specific
-*.pkl
-*.pickle
-*.h5
-*.hdf5
-*.parquet
-models/
-checkpoints/
-logs/
-results/
-output/
-figures/
-plots/
 
 # Large dataset files (uncomment if needed)
 # *.csv

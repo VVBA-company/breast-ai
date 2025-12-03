@@ -8,7 +8,7 @@ import pandas as pd
 from pathlib import Path
 
 # ==================== CONFIGURATION ====================
-MODEL_PATH = "../model/best_model.pkl"
+MODEL_PATH = "../model_v2/best_model.pkl"
 
 # Encoding maps
 ENCODING_MAPS = {
