@@ -26,11 +26,11 @@ const PredictionDetails: React.FC<PredictionDetailsProps> = ({
         className="main-result"
         style={{ borderLeftColor: getColorByType(prediction.cancer_type_code) }}
       >
-        <h4>Predicted cancer type:</h4>
+        <h4>Loại ung thư được dự đoán:</h4>
         <p className="cancer-type">{prediction.cancer_type_detailed}</p>
         <p className="cancer-description">
           {CANCER_TYPE_DESCRIPTIONS[prediction.cancer_type_code] ||
-            "No detailed information available"}
+            "Không có thông tin chi tiết"}
         </p>
       </div>
     </div>

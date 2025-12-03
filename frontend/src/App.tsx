@@ -77,8 +77,8 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>🎗️ Breast Cancer Prediction System</h1>
-        <p>Enter clinical information to predict detailed breast cancer type</p>
+        <h1>🎗️ Hệ Thống Dự Đoán Ung Thư Vú</h1>
+        <p>Nhập thông tin lâm sàng để dự đoán loại ung thư vú chi tiết</p>
       </header>
 
       <main className="main-content">
@@ -87,11 +87,11 @@ function App() {
             {/* Left Column */}
             <div className="form-column">
               <div className="form-section">
-                <h3>Surgery & Cancer Information</h3>
+                <h3>Thông Tin Phẫu Thuật & Ung Thư</h3>
 
                 <div className="form-group">
                   <label htmlFor="type_of_breast_surgery">
-                    Type of breast surgery:
+                    Loại phẫu thuật vú:
                   </label>
                   <select
                     id="type_of_breast_surgery"
@@ -100,14 +100,14 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Select surgery type</option>
-                    <option value="BREAST CONSERVING">Breast Conserving</option>
-                    <option value="MASTECTOMY">Mastectomy</option>
+                    <option value="">Chọn loại phẫu thuật</option>
+                    <option value="BREAST CONSERVING">Breast Conserving (Bảo tồn vú)</option>
+                    <option value="MASTECTOMY">Mastectomy (Cắt bỏ vú)</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="cancer_type">Cancer type:</label>
+                  <label htmlFor="cancer_type">Loại ung thư:</label>
                   <select
                     id="cancer_type"
                     name="cancer_type"
@@ -115,14 +115,14 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Select cancer type</option>
-                    <option value="Breast Cancer">Breast Cancer</option>
-                    <option value="Breast Sarcoma">Breast Sarcoma</option>
+                    <option value="">Chọn loại ung thư</option>
+                    <option value="Breast Cancer">Breast Cancer (Ung thư vú)</option>
+                    <option value="Breast Sarcoma">Breast Sarcoma (U xơ vú)</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="cellularity">Cellularity:</label>
+                  <label htmlFor="cellularity">Mật độ tế bào (Cellularity):</label>
                   <select
                     id="cellularity"
                     name="cellularity"
@@ -130,16 +130,16 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Select cellularity</option>
-                    <option value="High">High</option>
-                    <option value="Moderate">Moderate</option>
-                    <option value="Low">Low</option>
+                    <option value="">Chọn mật độ tế bào</option>
+                    <option value="High">High (Cao)</option>
+                    <option value="Moderate">Moderate (Trung bình)</option>
+                    <option value="Low">Low (Thấp)</option>
                   </select>
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="neoplasm_histologic_grade">
-                    Histologic grade (1-3):
+                    Độ mô học (Histologic Grade 1-3):
                   </label>
                   <select
                     id="neoplasm_histologic_grade"
@@ -148,9 +148,9 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value={1}>Grade 1</option>
-                    <option value={2}>Grade 2</option>
-                    <option value={3}>Grade 3</option>
+                    <option value={1}>Grade 1 (Độ 1)</option>
+                    <option value={2}>Grade 2 (Độ 2)</option>
+                    <option value={3}>Grade 3 (Độ 3)</option>
                   </select>
                 </div>
               </div>
@@ -159,11 +159,11 @@ function App() {
             {/* Middle Column */}
             <div className="form-column">
               <div className="form-section">
-                <h3>Molecular & Receptor Status</h3>
+                <h3>Phân Tử & Trạng Thái Thụ Thể</h3>
 
                 <div className="form-group">
                   <label htmlFor="pam50_+_claudin-low_subtype">
-                    PAM50 Subtype:
+                    Phân loại PAM50 Subtype:
                   </label>
                   <select
                     id="pam50_+_claudin-low_subtype"
@@ -172,7 +172,7 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Select PAM50 subtype</option>
+                    <option value="">Chọn phân loại PAM50</option>
                     <option value="Basal">Basal</option>
                     <option value="Her2">Her2</option>
                     <option value="LumA">LumA</option>
@@ -184,7 +184,7 @@ function App() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="her2_status">HER2 status:</label>
+                  <label htmlFor="her2_status">Trạng thái HER2:</label>
                   <select
                     id="her2_status"
                     name="her2_status"
@@ -192,14 +192,14 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Select HER2 status</option>
-                    <option value="Positive">Positive</option>
-                    <option value="Negative">Negative</option>
+                    <option value="">Chọn trạng thái HER2</option>
+                    <option value="Positive">Positive (Dương tính)</option>
+                    <option value="Negative">Negative (Âm tính)</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="pr_status">PR status:</label>
+                  <label htmlFor="pr_status">Trạng thái PR:</label>
                   <select
                     id="pr_status"
                     name="pr_status"
@@ -207,15 +207,15 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="">Select PR status</option>
-                    <option value="Positive">Positive</option>
-                    <option value="Negative">Negative</option>
+                    <option value="">Chọn trạng thái PR</option>
+                    <option value="Positive">Positive (Dương tính)</option>
+                    <option value="Negative">Negative (Âm tính)</option>
                   </select>
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="lymph_nodes_examined_positive">
-                    Positive lymph nodes examined:
+                    Số hạch bạch huyết dương tính:
                   </label>
                   <input
                     type="number"
@@ -233,10 +233,10 @@ function App() {
             {/* Right Column */}
             <div className="form-column">
               <div className="form-section">
-                <h3>Treatment & Clinical Parameters</h3>
+                <h3>Điều Trị & Thông Số Lâm Sàng</h3>
 
                 <div className="form-group">
-                  <label htmlFor="chemotherapy">Chemotherapy:</label>
+                  <label htmlFor="chemotherapy">Hóa trị (Chemotherapy):</label>
                   <select
                     id="chemotherapy"
                     name="chemotherapy"
@@ -244,13 +244,13 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value={0}>No</option>
-                    <option value={1}>Yes</option>
+                    <option value={0}>Không</option>
+                    <option value={1}>Có</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="hormone_therapy">Hormone therapy:</label>
+                  <label htmlFor="hormone_therapy">Liệu pháp nội tiết (Hormone Therapy):</label>
                   <select
                     id="hormone_therapy"
                     name="hormone_therapy"
@@ -258,13 +258,13 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value={0}>No</option>
-                    <option value={1}>Yes</option>
+                    <option value={0}>Không</option>
+                    <option value={1}>Có</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="radio_therapy">Radiotherapy:</label>
+                  <label htmlFor="radio_therapy">Xạ trị (Radiotherapy):</label>
                   <select
                     id="radio_therapy"
                     name="radio_therapy"
@@ -272,14 +272,14 @@ function App() {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value={0}>No</option>
-                    <option value={1}>Yes</option>
+                    <option value={0}>Không</option>
+                    <option value={1}>Có</option>
                   </select>
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="nottingham_prognostic_index">
-                    Nottingham prognostic index:
+                    Chỉ số tiên lượng Nottingham (NPI):
                   </label>
                   <input
                     type="number"
@@ -297,20 +297,20 @@ function App() {
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? "🔄 Predicting..." : "🔍 Predict"}
+            {loading ? "🔄 Đang dự đoán..." : "🔍 Dự Đoán"}
           </button>
         </form>
 
         {error && (
           <div className="error-message">
-            <h3>❌ Error</h3>
+            <h3>❌ Lỗi</h3>
             <p>{error}</p>
           </div>
         )}
 
         {prediction && (
           <div className="prediction-result">
-            <h3>🎯 Prediction Results</h3>
+            <h3>🎯 Kết Quả Dự Đoán</h3>
             <PredictionDetails prediction={prediction} />
           </div>
         )}
@@ -318,8 +318,7 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          ⚠️ Note: This result is for reference only. Please consult with a
-          specialist doctor for professional medical advice.
+          ⚠️ Lưu ý: Kết quả này chỉ mang tính chất tham khảo. Vui lòng tham khảo ý kiến bác sĩ chuyên khoa để được tư vấn y khoa chuyên nghiệp.
         </p>
       </footer>
     </div>
