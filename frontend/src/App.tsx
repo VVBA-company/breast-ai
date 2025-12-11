@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import type { PatientData, PredictionResult } from "./types";
+import type { PatientData, MultiModelPredictionResult } from "./types";
 import PredictionDetails from "./components/PredictionDetails";
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
     radio_therapy: 0,
   });
 
-  const [prediction, setPrediction] = useState<PredictionResult | null>(null);
+  const [prediction, setPrediction] = useState<MultiModelPredictionResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +49,7 @@ function App() {
     setPrediction(null);
 
     try {
-      const response = await fetch("http://localhost:8000/predict", {
+      const response = await fetch("http://localhost:8000/predict-all", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,7 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result: PredictionResult = await response.json();
+      const result: MultiModelPredictionResult = await response.json();
       setPrediction(result);
     } catch (err) {
       setError(

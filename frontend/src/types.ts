@@ -28,6 +28,18 @@ export interface PredictionResult {
   cancer_type_code: number;
 }
 
+export interface ModelPrediction {
+  model_name: string;
+  cancer_type_detailed: string;
+  cancer_type_code: number;
+  confidence?: number;
+  probabilities?: Record<string, number>;
+}
+
+export interface MultiModelPredictionResult {
+  predictions: ModelPrediction[];
+}
+
 export interface APIError {
   detail: string;
 }
