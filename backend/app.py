@@ -1,14 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
-from typing import Literal
+from typing import Literal, List, Dict, Optional
 import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
 
+from services.model_service import ModelService, ModelPredictionResult
+
 # ==================== CONFIGURATION ====================
-MODEL_PATH = "../model_v2/best_model.pkl"
+MODEL_SVM_PATH = "../model_v2/best_model.pkl"
+MODEL_RF_PATH = "../figures/best_model_random_forest.pkl"
 
 # Encoding maps
 ENCODING_MAPS = {
@@ -72,13 +75,45 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load model at startup
-try:
-    model = joblib.load(MODEL_PATH)
-    print(f"✅ Model loaded successfully from {MODEL_PATH}")
-except Exception as e:
-    print(f"❌ Error loading model: {e}")
-    model = None
+# Load models at startup
+models = {}
+model_service = None
+
+def load_models():
+    """Load tất cả models và khởi tạo ModelService"""
+    global models, model_service
+    
+    # Load SVM model
+    try:
+        svm_model = joblib.load(MODEL_SVM_PATH)
+        models["SVM"] = svm_model
+        print(f"✅ SVM Model loaded successfully from {MODEL_SVM_PATH}")
+    except Exception as e:
+        print(f"❌ Error loading SVM model: {e}")
+    
+    # Load Random Forest model
+    try:
+        rf_model = joblib.load(MODEL_RF_PATH)
+        models["Random Forest"] = rf_model
+        print(f"✅ Random Forest Model loaded successfully from {MODEL_RF_PATH}")
+    except Exception as e:
+        print(f"❌ Error loading Random Forest model: {e}")
+    
+    # Initialize ModelService nếu có ít nhất 1 model
+    if models:
+        model_service = ModelService(
+            models=models,
+            cancer_type_mapping=CANCER_TYPE_DETAILED
+        )
+        print(f"✅ ModelService initialized with {len(models)} model(s)")
+    else:
+        print("❌ No models loaded. ModelService not initialized.")
+
+# Load models at startup
+load_models()
+
+# Backward compatibility: giữ model variable cho endpoint /predict cũ
+model = models.get("SVM", None)
 
 
 # ==================== PYDANTIC MODELS ====================
@@ -139,6 +174,20 @@ class PredictionOutput(BaseModel):
     cancer_type_code: int = Field(..., description="Mã số loại ung thư")
 
 
+class ModelPredictionResponse(BaseModel):
+    """Response cho 1 model prediction"""
+    model_name: str = Field(..., description="Tên model")
+    cancer_type_detailed: str = Field(..., description="Loại ung thư chi tiết")
+    cancer_type_code: int = Field(..., description="Mã số loại ung thư")
+    confidence: Optional[float] = Field(None, description="Độ tin cậy")
+    probabilities: Optional[Dict[str, float]] = Field(None, description="Xác suất cho từng class")
+
+
+class MultiModelPredictionOutput(BaseModel):
+    """Response cho multi-model prediction"""
+    predictions: List[ModelPredictionResponse] = Field(..., description="Kết quả từ từng model")
+
+
 # ==================== HELPER FUNCTIONS ====================
 def encode_input(patient_data: PatientInput) -> pd.DataFrame:
     """Chuyển đổi input sang format model cần"""
@@ -163,7 +212,8 @@ def read_root():
     return {
         "message": "Breast Cancer Prediction API",
         "status": "running",
-        "model_loaded": model is not None,
+        "models_loaded": list(models.keys()) if models else [],
+        "model_count": len(models),
     }
 
 
@@ -215,14 +265,61 @@ async def predict(patient: PatientInput):
         raise HTTPException(status_code=400, detail=f"Lỗi dự đoán: {str(e)}")
 
 
+@app.post("/predict-all", response_model=MultiModelPredictionOutput)
+async def predict_all(patient: PatientInput):
+    """
+    Dự đoán với tất cả models
+    
+    - **Input**: Thông tin lâm sàng bệnh nhân
+    - **Output**: Kết quả từ từng model
+    """
+    if model_service is None or not models:
+        raise HTTPException(status_code=500, detail="Models chưa được load")
+
+    try:
+        # Encode input
+        X = encode_input(patient)
+
+        # Predict với tất cả models
+        predictions = model_service.predict_all(X)
+
+        if not predictions:
+            raise HTTPException(
+                status_code=500, 
+                detail="Không có model nào predict thành công"
+            )
+
+        # Convert to response format
+        prediction_responses = [
+            ModelPredictionResponse(**pred.to_dict())
+            for pred in predictions
+        ]
+
+        return MultiModelPredictionOutput(
+            predictions=prediction_responses
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Lỗi dự đoán: {str(e)}")
+
+
 @app.get("/model-info")
 def model_info():
-    """Thông tin về model và features"""
-    if model is None:
-        raise HTTPException(status_code=500, detail="Model chưa được load")
+    """Thông tin về models và features"""
+    if not models:
+        raise HTTPException(status_code=500, detail="Models chưa được load")
+
+    model_info_dict = {}
+    for name, model_obj in models.items():
+        model_info_dict[name] = {
+            "model_type": str(type(model_obj)),
+            "has_predict_proba": hasattr(model_obj, "predict_proba"),
+        }
 
     return {
-        "model_type": str(type(model)),
+        "models": model_info_dict,
         "features": FEATURE_ORDER,
         "output_classes": CANCER_TYPE_DETAILED,
         "encoding_maps": ENCODING_MAPS,
