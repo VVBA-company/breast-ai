@@ -1,17 +1,17 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field, validator
-from typing import Literal, List, Dict, Optional
+from typing import Dict, List, Literal, Optional
+
 import joblib
 import numpy as np
 import pandas as pd
-from pathlib import Path
-
-from services.model_service import ModelService, ModelPredictionResult
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from services.model_service import ModelService
 
 # ==================== CONFIGURATION ====================
-MODEL_SVM_PATH = "../model_v2/best_model.pkl"
-MODEL_RF_PATH = "../figures/best_model_random_forest.pkl"
+MODEL_SVM_PATH = "../model_v2/svm.pkl"
+MODEL_RF_PATH = "../model_v2/best_model_random_forest.pkl"
+MODEL_DT_PATH = "../model_v2/decision_tree_best.pkl"
 
 # Encoding maps
 ENCODING_MAPS = {
@@ -79,10 +79,11 @@ app.add_middleware(
 models = {}
 model_service = None
 
+
 def load_models():
     """Load tất cả models và khởi tạo ModelService"""
     global models, model_service
-    
+
     # Load SVM model
     try:
         svm_model = joblib.load(MODEL_SVM_PATH)
@@ -90,7 +91,7 @@ def load_models():
         print(f"✅ SVM Model loaded successfully from {MODEL_SVM_PATH}")
     except Exception as e:
         print(f"❌ Error loading SVM model: {e}")
-    
+
     # Load Random Forest model
     try:
         rf_model = joblib.load(MODEL_RF_PATH)
@@ -98,16 +99,24 @@ def load_models():
         print(f"✅ Random Forest Model loaded successfully from {MODEL_RF_PATH}")
     except Exception as e:
         print(f"❌ Error loading Random Forest model: {e}")
-    
+
+    # Load Decision Tree model
+    try:
+        dt_model = joblib.load(MODEL_DT_PATH)
+        models["Decision Tree"] = dt_model
+        print(f"✅ Decision Tree Model loaded successfully from {MODEL_DT_PATH}")
+    except Exception as e:
+        print(f"❌ Error loading Decision Tree model: {e}")
+
     # Initialize ModelService nếu có ít nhất 1 model
     if models:
         model_service = ModelService(
-            models=models,
-            cancer_type_mapping=CANCER_TYPE_DETAILED
+            models=models, cancer_type_mapping=CANCER_TYPE_DETAILED
         )
         print(f"✅ ModelService initialized with {len(models)} model(s)")
     else:
         print("❌ No models loaded. ModelService not initialized.")
+
 
 # Load models at startup
 load_models()
@@ -176,16 +185,22 @@ class PredictionOutput(BaseModel):
 
 class ModelPredictionResponse(BaseModel):
     """Response cho 1 model prediction"""
+
     model_name: str = Field(..., description="Tên model")
     cancer_type_detailed: str = Field(..., description="Loại ung thư chi tiết")
     cancer_type_code: int = Field(..., description="Mã số loại ung thư")
     confidence: Optional[float] = Field(None, description="Độ tin cậy")
-    probabilities: Optional[Dict[str, float]] = Field(None, description="Xác suất cho từng class")
+    probabilities: Optional[Dict[str, float]] = Field(
+        None, description="Xác suất cho từng class"
+    )
 
 
 class MultiModelPredictionOutput(BaseModel):
     """Response cho multi-model prediction"""
-    predictions: List[ModelPredictionResponse] = Field(..., description="Kết quả từ từng model")
+
+    predictions: List[ModelPredictionResponse] = Field(
+        ..., description="Kết quả từ từng model"
+    )
 
 
 # ==================== HELPER FUNCTIONS ====================
@@ -269,7 +284,7 @@ async def predict(patient: PatientInput):
 async def predict_all(patient: PatientInput):
     """
     Dự đoán với tất cả models
-    
+
     - **Input**: Thông tin lâm sàng bệnh nhân
     - **Output**: Kết quả từ từng model
     """
@@ -285,19 +300,15 @@ async def predict_all(patient: PatientInput):
 
         if not predictions:
             raise HTTPException(
-                status_code=500, 
-                detail="Không có model nào predict thành công"
+                status_code=500, detail="Không có model nào predict thành công"
             )
 
         # Convert to response format
         prediction_responses = [
-            ModelPredictionResponse(**pred.to_dict())
-            for pred in predictions
+            ModelPredictionResponse(**pred.to_dict()) for pred in predictions
         ]
 
-        return MultiModelPredictionOutput(
-            predictions=prediction_responses
-        )
+        return MultiModelPredictionOutput(predictions=prediction_responses)
 
     except HTTPException:
         raise

@@ -22,6 +22,13 @@ const PredictionDetails: React.FC<PredictionDetailsProps> = ({
     return colors[code as keyof typeof colors] || "#95a5a6";
   };
 
+  const getModelIcon = (modelName: string): string => {
+    if (modelName === "SVM") return "🤖";
+    if (modelName === "Random Forest") return "🌲";
+    if (modelName === "Decision Tree") return "🌳";
+    return "📊";
+  };
+
   const toggleProbabilities = (modelName: string) => {
     setExpandedProbs((prev) => ({
       ...prev,
@@ -47,7 +54,7 @@ const PredictionDetails: React.FC<PredictionDetailsProps> = ({
           >
             <div className="model-header">
               <h5>
-                {modelPred.model_name === "SVM" ? "🤖" : "🌲"}{" "}
+                {getModelIcon(modelPred.model_name)}{" "}
                 {modelPred.model_name}
               </h5>
               {modelPred.confidence !== undefined && (
